@@ -1,0 +1,6 @@
+<launch>
+
+	<node name="backend_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/backend_dashboard.perspective"/>
+	<node name="cart_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/cart_dashboard.perspective"/>
+
+</launch>
