@@ -196,3 +196,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(cart_teleop_joy src/cart_teleop_joy.cpp)
+target_link_libraries(cart_teleop_joy ${catkin_LIBRARIES})
