@@ -196,3 +196,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(battery_management_system src/battery_management_system.cpp)
+target_link_libraries(battery_management_system ${catkin_LIBRARIES})
