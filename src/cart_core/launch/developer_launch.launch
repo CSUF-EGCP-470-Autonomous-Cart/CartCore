@@ -14,6 +14,10 @@
 		<param name="scale_angular" value="2" type="double"/>
 	</node>
 
+	<node respawn="true" pkg="safety_system" type="safety_system" name="safety" />
+
+	<node respawn="true" pkg="drive_system" type="drive_system" name="drive" />
+
 	<node name="backend_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/backend_dashboard.perspective"/>
 	<node name="cart_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/cart_dashboard.perspective"/>
 

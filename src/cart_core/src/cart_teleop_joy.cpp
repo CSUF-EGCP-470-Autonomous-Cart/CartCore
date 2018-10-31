@@ -47,4 +47,6 @@ int main(int argc, char** argv)
 	TeleopCart teleop_cart;
 
 	ros::spin();
+
+	return 0;
 }
