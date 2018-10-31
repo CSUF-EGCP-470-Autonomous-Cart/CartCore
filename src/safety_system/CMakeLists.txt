@@ -196,3 +196,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(safety_system src/safety_system.cpp)
+target_link_libraries(safety_system ${catkin_LIBRARIES})
