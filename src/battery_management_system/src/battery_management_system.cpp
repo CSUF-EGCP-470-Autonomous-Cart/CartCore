@@ -2,6 +2,7 @@
 #include <sensor_msgs/BatteryState.h>
 #include <ros/console.h>
 #include <std_srvs/Trigger.h>
+#include <vector>
 
 void print(ros::console::Level level, const std::string& s) {
 	ROS_LOG(level, ROSCONSOLE_DEFAULT_NAME, "%s", s.c_str());
@@ -21,6 +22,9 @@ class BatteryManagementSystem {
 		double BANK_VOLTAGE_MIN;
 		double BANK_VOLTAGE_LOW;
 		double BANK_VOLTAGE_MAX;
+		double CAPACITY;
+
+		int CELLS;
 
 		double CELL_VOLTAGE_MIN;
 		double CELL_VOLTAGE_LOW;
@@ -31,7 +35,30 @@ class BatteryManagementSystem {
 
 };
 
-BatteryManagementSystem::BatteryManagementSystem() {
+BatteryManagementSystem::BatteryManagementSystem():
+	BANK_VOLTAGE_MIN(0.0),
+	BANK_VOLTAGE_LOW(0.0),
+	BANK_VOLTAGE_MAX(0.0),
+	CAPACITY(NAN),
+	CELL_VOLTAGE_MIN(0.0),
+	CELL_VOLTAGE_LOW(0.0),
+	CELL_VOLTAGE_MAX(0.0),
+	CELL_TEMP_MIN(0.0),
+	CELL_TEMP_MAX(0.0),
+	CELLS(1)
+{
+
+	nh_.param("bank_voltage_min", BANK_VOLTAGE_MIN, BANK_VOLTAGE_MIN);
+	nh_.param("bank_voltage_low", BANK_VOLTAGE_LOW, BANK_VOLTAGE_LOW);
+	nh_.param("bank_voltage_max", BANK_VOLTAGE_MAX, BANK_VOLTAGE_MAX);
+	nh_.param("capacity", CAPACITY, CAPACITY);
+	nh_.param("cells", CELLS, CELLS);
+	nh_.param("cell_voltage_min", CELL_VOLTAGE_MIN, CELL_VOLTAGE_MIN);
+	nh_.param("cell_voltage_low", CELL_VOLTAGE_LOW, CELL_VOLTAGE_LOW);
+	nh_.param("cell_voltage_max", CELL_VOLTAGE_MAX, CELL_VOLTAGE_MAX);
+	nh_.param("cell_temp_min", CELL_TEMP_MIN, CELL_TEMP_MIN);
+	nh_.param("cell_temp_max", CELL_TEMP_MAX, CELL_TEMP_MAX);
+
 	batteryStatePublisher = nh_.advertise<sensor_msgs::BatteryState>("battery_state", 1);
 	safetySystemClient = nh_.serviceClient<std_srvs::Trigger>("digital_estop");
 }
@@ -54,7 +81,14 @@ void BatteryManagementSystem::update() {
 	battery.voltage = bankVoltage;
 	battery.current = bankCurrent;
 	battery.present = true;
+	battery.capacity = CAPACITY;
+	battery.charge = NAN;
+	battery.design_capacity = NAN;
+	battery.percentage = NAN;
+	battery.power_supply_status = sensor_msgs::BatteryState::POWER_SUPPLY_STATUS_UNKNOWN;
 //	battery.cell_voltage = cellVoltages;
+	battery.location = "Under the seat";
+	battery.serial_number = "";
 
 
 	if(bankVoltage <= 0.0){
@@ -76,7 +110,11 @@ void BatteryManagementSystem::update() {
 
 	bool cellOverheating = false;
 	bool cellCold = false;
+//	battery.cell_voltage = new float[CELLS];
+	std::vector<float> cells;
 	for(int i=0; i<NUM_CELLS;++i) {
+//		battery.cell_voltage[i] = (float)cellVoltages[i];
+
 		if(cellTemps[i] > CELL_TEMP_MAX) {
 //			ROS_LOG(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i temperature high: %dC > %dC", i, cellTemps[i], CELL_TEMP_MAX);
 			cellOverheating = true;

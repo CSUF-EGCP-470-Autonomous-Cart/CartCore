@@ -18,7 +18,18 @@
 
 	<node respawn="true" pkg="drive_system" type="drive_system" name="drive" />
 
-	<node respawn="true" pkg="battery_management_system" type="battery_management_system" name="bms"/>
+	<node respawn="true" pkg="battery_management_system" type="battery_management_system" name="battery_management_system">
+		<param name="bank_voltage_min" type="double" value="48.96" />
+		<param name="bank_voltage_low" type="double" value="49.5" />
+		<param name="bank_voltage_max" type="double" value="51.6" />
+		<param name="cell_voltage_min" type="double" value="8.16" />
+		<param name="cell_voltage_low" type="double" value="8.25" />
+		<param name="cell_voltage_max" type="double" value="8.6" />
+		<param name="cell_temp_min" type="double" value="0.0" />
+		<param name="cell_temp_max" type="double" value="45.0" />
+		<param name="capacity" type="double" value="1132.5" />
+		<param name="cells" type="int" value="6"/>
+	</node>
 
 	<node name="backend_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/backend_dashboard.perspective"/>
 	<node name="cart_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find cart_core)/rqt_config/cart_dashboard.perspective"/>
