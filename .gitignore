@@ -52,3 +52,4 @@ CATKIN_IGNORE
 
 src/urdf_tutorial/
 install/share/urdf_tutorial
+/src/rqt_joy/
