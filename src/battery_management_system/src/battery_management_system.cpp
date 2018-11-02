@@ -156,13 +156,18 @@ void BatteryManagementSystem::update() {
 	}
 
 	if(battery.power_supply_health != sensor_msgs::BatteryState::POWER_SUPPLY_HEALTH_GOOD) {
-/*		if(safetySystemClient.call()) {
-			print();
+		std_srvs::Trigger srv;
+		if(safetySystemClient.call(srv)) {
+			if(srv.response.success) {
+					ROS_LOG_STREAM(ros::console::Level::Debug, ROSCONSOLE_DEFAULT_NAME, "Successfully called digital estop service");
+			}
+			else {
+				ROS_LOG_STREAM(ros::console::Level::Error, ROSCONSOLE_DEFAULT_NAME, "Successfully called digital estop service. Service failed to execute.");
+			}
 		}
 		else {
-			print();
+			ROS_LOG_STREAM(ros::console::Level::Error, ROSCONSOLE_DEFAULT_NAME, "Failed to call digital estop service");
 		}
-*/
 	}
 
 
