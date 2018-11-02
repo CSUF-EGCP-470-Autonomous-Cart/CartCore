@@ -92,20 +92,20 @@ void BatteryManagementSystem::update() {
 
 
 	if(bankVoltage <= 0.0){
-//		print();
+		ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery not present");
 		battery.present = false;
 	}
 	else if (bankVoltage <= BANK_VOLTAGE_MIN) {
-//		ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEAFULT_NAME, "Battery bank voltage below minimum: " << bankVoltage << "V <= " << BANK_VOLTAGE_MIN << "V");
+		ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage below minimum: " << bankVoltage << "V <= " << BANK_VOLTAGE_MIN << "V");
 	}
 	else if(bankVoltage <= BANK_VOLTAGE_LOW) {
-//		ROS_LOG_STREAM(ros::console::Level::Warn, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage low: " << bankVoltage "V <= " << BANK_VOLTAGE_LOX << "V");
+		ROS_LOG_STREAM(ros::console::Level::Warn, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage low: " << bankVoltage << "V <= " << BANK_VOLTAGE_LOW << "V");
 	}
 	else if(bankVoltage >= BANK_VOLTAGE_MAX) {
-//		ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage above max: " << bankVoltage << "V >= " << BANK_VOLTAGE_MAX << "V");
+		ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage above max: " << bankVoltage << "V >= " << BANK_VOLTAGE_MAX << "V");
 	}
 	else {
-//		ROS_LOG(ros::console::Level::Info, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage OK: %d", bankVoltage);
+		ROS_LOG_STREAM(ros::console::Level::Info, ROSCONSOLE_DEFAULT_NAME, "Battery bank voltage OK: " << bankVoltage);
 	}
 
 	bool cellOverheating = false;
@@ -116,27 +116,27 @@ void BatteryManagementSystem::update() {
 //		battery.cell_voltage[i] = (float)cellVoltages[i];
 
 		if(cellTemps[i] > CELL_TEMP_MAX) {
-//			ROS_LOG(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i temperature high: %dC > %dC", i, cellTemps[i], CELL_TEMP_MAX);
+			ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell " << i << " temperature high: " << cellTemps[i] << "C > " << CELL_TEMP_MAX << "C");
 			cellOverheating = true;
 		}
 
 		if(cellTemps[i] < CELL_TEMP_MIN) {
-//			ROS_LOG(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i temperature low: %dC < %dC", i, cellTemps[i], CELL_TEMP_MIN);
+			ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell " << i << " temperature low: " << cellTemps[i] << "C < " << CELL_TEMP_MIN << "C");
 			cellCold = true;
 		}
 
 
 		if (cellVoltages[i] <= CELL_VOLTAGE_MIN) {
-//			ROS_LOG(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i voltage below minimum: %d <= %d", i, bankVoltage, BANK_VOLTAGE_MIN);
+			ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME, "Battery cell " << i << " voltage below minimum: " << cellVoltages[i] << "V <= " << CELL_VOLTAGE_MIN << "V");
 		}
 		else if(cellVoltages[i] <= CELL_VOLTAGE_LOW) {
-//			ROS_LOG(ros::console::Level::Warn, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i voltage low: %d <= %d", i, bankVoltage, BANK_VOLTAGE_LOW);
+			ROS_LOG_STREAM(ros::console::Level::Warn, ROSCONSOLE_DEFAULT_NAME, "Battery cell " << i << " voltage low: " << cellVoltages[i] << "V <= " << CELL_VOLTAGE_LOW << "V");
 		}
 		else if(cellVoltages[i] >= CELL_VOLTAGE_MAX) {
-//			ROS_LOG(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME,  "Battery cell %i voltage above max: %d >= %d", i, bankVoltage, BANK_VOLTAGE_MAX);
+			ROS_LOG_STREAM(ros::console::Level::Fatal, ROSCONSOLE_DEFAULT_NAME,  "Battery cell " << i << " voltage above max: " << cellVoltages[i] << "V >= " << CELL_VOLTAGE_MAX << "V");
 		}
 		else {
-//			ROS_LOG(ros::console::Level::Info, ROSCONSOLE_DEFAULT_NAME, "Battery cell %i voltage OK: %d", i, bankVoltage);
+			ROS_LOG_STREAM(ros::console::Level::Info, ROSCONSOLE_DEFAULT_NAME, "Battery cell " << i << " voltage OK: " << cellVoltages[i] << "V");
 		}
 	}
 
@@ -173,7 +173,7 @@ int main(int argc, char** argv){
 	ros::init(argc, argv, "battery_management_system");
 	BatteryManagementSystem battery_management_system;
 
-	ros::Rate loop_rate(10);
+	ros::Rate loop_rate(1);
 
 	while(ros::ok()) {
 		battery_management_system.update();
@@ -185,4 +185,3 @@ int main(int argc, char** argv){
 
 	return 0;
 }
-
